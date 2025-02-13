@@ -6,10 +6,10 @@ import java.util.List;
 
 
 public interface ProductService {
-    public Product create(Product product);
-    public List<Product> findAll();
-
+    Product create(Product product);
+    List<Product> findAll();
     Product findById(String productId);
     void update(Product product);
+    void delete(String productId);
 }
 
