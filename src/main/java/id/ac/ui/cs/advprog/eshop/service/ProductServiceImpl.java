@@ -36,7 +36,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void update(Product product) {
-        productRepository.update(product);
+        Product existingProduct = findById(product.getProductId());
+        if (existingProduct != null) {
+            existingProduct.setProductName(product.getProductName());
+            existingProduct.setProductQuantity(product.getProductQuantity());
+        }
     }
 
+    @Override
+    public void delete(String productId) {
+        productRepository.delete(productId);
+    }
 }
