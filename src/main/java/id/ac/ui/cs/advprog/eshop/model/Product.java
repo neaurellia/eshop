@@ -25,4 +25,19 @@ public class Product {
         this.price = price;
         this.productQuantity = productQuantity;
     }
+
+    public void setProductQuantity(int productQuantity) {
+        if (productQuantity < 0) {
+            throw new IllegalArgumentException("Product quantity cannot be negative!");
+        }
+        this.productQuantity = productQuantity;
+    }
+
+    public void setProductName(String productName) {
+        if (productName == null || productName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty!");
+        }
+        this.productName = productName;
+    }
+
 }

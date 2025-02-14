@@ -46,21 +46,22 @@ class ProductTest {
     // Negative scenario: Editing product with invalid quantity (negative value)
     @Test
     void testEditProduct_Fail_InvalidQuantity() {
-        // Attempt to set invalid quantity
-        product.setProductQuantity(-10);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            product.setProductQuantity(-10);
+        });
 
-        // Ensure quantity is still valid (not allowed to be negative)
-        assertTrue(product.getProductQuantity() >= 0, "Product quantity should not be negative!");
+        assertEquals("Product quantity cannot be negative!", exception.getMessage());
     }
+
 
     // Negative scenario: Editing product with empty name
     @Test
     void testEditProduct_Fail_EmptyName() {
-        // Attempt to set empty product name
-        product.setProductName("");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            product.setProductName("");
+        });
 
-        // Ensure name is not empty
-        assertFalse(product.getProductName().isEmpty(), "Product name should not be empty!");
+        assertEquals("Product name cannot be empty!", exception.getMessage());
     }
 
     // Positive scenario: Deleting product successfully
