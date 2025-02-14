@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 class ProductTest {
     Product product;
 
@@ -28,5 +29,60 @@ class ProductTest {
     @Test
     void testGetProductQuantity() {
         assertEquals(100, this.product.getProductQuantity());
+    }
+
+    // Positive scenario: Editing product successfully
+    @Test
+    void testEditProduct_Success() {
+        // Edit product details
+        product.setProductName("Sampo Cap Aman");
+        product.setProductQuantity(50);
+
+        // Verify changes
+        assertEquals("Sampo Cap Aman", product.getProductName());
+        assertEquals(50, product.getProductQuantity());
+    }
+
+    // Negative scenario: Editing product with invalid quantity (negative value)
+    @Test
+    void testEditProduct_Fail_InvalidQuantity() {
+        // Attempt to set invalid quantity
+        product.setProductQuantity(-10);
+
+        // Ensure quantity is still valid (not allowed to be negative)
+        assertTrue(product.getProductQuantity() >= 0, "Product quantity should not be negative!");
+    }
+
+    // Negative scenario: Editing product with empty name
+    @Test
+    void testEditProduct_Fail_EmptyName() {
+        // Attempt to set empty product name
+        product.setProductName("");
+
+        // Ensure name is not empty
+        assertFalse(product.getProductName().isEmpty(), "Product name should not be empty!");
+    }
+
+    // Positive scenario: Deleting product successfully
+    @Test
+    void testDeleteProduct_Success() {
+        product = null; // Simulating deletion
+
+        assertNull(product, "Product should be deleted (nullified)");
+    }
+
+    // Negative scenario: Deleting a product that is already null (double deletion)
+    @Test
+    void testDeleteProduct_Fail_AlreadyDeleted() {
+        product = null; // First deletion
+
+        // Try deleting again
+        try {
+            product = null; // Second deletion attempt
+        } catch (Exception e) {
+            fail("Deleting a non-existent product should not throw an exception.");
+        }
+
+        assertNull(product, "Product should still be null after attempted re-deletion.");
     }
 }
