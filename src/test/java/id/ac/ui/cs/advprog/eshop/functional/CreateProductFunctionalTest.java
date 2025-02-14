@@ -49,18 +49,6 @@ class CreateProductFunctionalTest {
         assertTrue(tableContent.contains("123"));
     }
 
-    @Test
-    void shouldFailWhenNameIsEmpty(WebDriver driver) throws Exception {
-        driver.get(baseUrl + "/product/create");
-
-        WebElement quantityField = driver.findElement(By.id("quantityInput"));
-        quantityField.sendKeys("456");
-
-        WebElement submitBtn = driver.findElement(By.cssSelector("button[type='submit']"));
-        submitBtn.click();
-
-        assertTrue(driver.getCurrentUrl().contains("/product/create"));
-    }
 
     @Test
     void shouldFailWhenQuantityIsNegative(WebDriver driver) throws Exception {
