@@ -9,6 +9,7 @@ plugins {
 group = "id.ac.ui.cs.advprog"
 version = "0.0.1-SNAPSHOT"
 
+<<<<<<< HEAD
 sonar {
     properties {
         property("sonar.projectKey", "neaurellia_eshop")
@@ -17,6 +18,8 @@ sonar {
     }
 }
 
+=======
+>>>>>>> 0418fe0abc5a57abe90e3b35b91b25a936eca5f8
 
 java {
     toolchain {
