@@ -15,6 +15,7 @@ sonar {
         property("sonar.projectKey", "neaurellia_eshop")
         property("sonar.organization", "neaurellia")
         property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.login", System.getenv("SONAR_TOKEN"))
     }
 }
 
