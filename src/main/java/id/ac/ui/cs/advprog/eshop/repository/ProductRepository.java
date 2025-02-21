@@ -3,33 +3,38 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class ProductRepository {
-    private List<Product> productData = new ArrayList<>();
+    private Map<String, Product> productData = new LinkedHashMap<>(); // Preserve insertion order
 
     public Product create(Product product) {
-        productData.add(product);
+        if (productData.containsKey(product.getProductId())) {
+            throw new IllegalArgumentException("Duplicate productId is not allowed");
+        }
+        productData.put(product.getProductId(), product);
         return product;
     }
 
-    public Iterator<Product> findAll() {
-        return productData.iterator();
+    public List<Product> findAll() {
+        return new ArrayList<>(productData.values()); // Preserve order
     }
 
     public Product findById(String productId) {
-        for (Product product : productData) {
-            if (product.getProductId().equals(productId)) {
-                return product;
-            }
-        }
-        return null;
+        return productData.get(productId);
     }
 
     public void delete(String productId) {
-        productData.removeIf(product -> product.getProductId().equals(productId));
+        productData.remove(productId);
     }
+
+    public void update(Product product) {
+        if (!productData.containsKey(product.getProductId())) {
+            throw new IllegalArgumentException("Cannot update: Product not found!");
+        }
+        productData.put(product.getProductId(), product); // Overwrites existing product
+    }
+
+
 }

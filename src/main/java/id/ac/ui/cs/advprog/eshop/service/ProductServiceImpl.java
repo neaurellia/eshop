@@ -5,8 +5,6 @@ import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -17,16 +15,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product product) {
-        productRepository.create(product);
-        return product;
+        return productRepository.create(product);
     }
 
     @Override
     public List<Product> findAll() {
-        Iterator<Product> productIterator = productRepository.findAll();
-        List<Product> allProduct = new ArrayList<>();
-        productIterator.forEachRemaining(allProduct::add);
-        return allProduct;
+        return productRepository.findAll(); // No need for additional conversion
     }
 
     @Override
@@ -36,11 +30,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void update(Product product) {
-        Product existingProduct = findById(product.getProductId());
-        if (existingProduct != null) {
-            existingProduct.setProductName(product.getProductName());
-            existingProduct.setProductQuantity(product.getProductQuantity());
+        if (product == null || product.getProductId() == null) {
+            throw new IllegalArgumentException("Product or product ID cannot be null");
         }
+
+        Product existingProduct = productRepository.findById(product.getProductId());
+        if (existingProduct == null) {
+            throw new IllegalArgumentException("Cannot update: Product not found!");
+        }
+
+        existingProduct.setProductName(product.getProductName());
+        existingProduct.setDescription(product.getDescription());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setProductQuantity(product.getProductQuantity());
+
+        productRepository.update(existingProduct); // Ensure repository updates it
     }
 
     @Override

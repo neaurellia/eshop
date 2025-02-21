@@ -1,89 +1,231 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
-    Product product;
 
-    @BeforeEach
-    void setUp() {
-        this.product = new Product();
-        this.product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
-        this.product.setProductName("Sampo Cap Bambang");
-        this.product.setProductQuantity(100);
+    @Test
+    void testProductConstructor() {
+        Product product = new Product("Laptop", "High-performance laptop", 1500.0, 5);
+
+        assertNotNull(product.getProductId()); // Ensure productId is generated
+        assertEquals("Laptop", product.getProductName());
+        assertEquals("High-performance laptop", product.getDescription());
+        assertEquals(1500.0, product.getPrice());
+        assertEquals(5, product.getProductQuantity());
     }
 
     @Test
-    void testGetProductId() {
-        assertEquals("eb558e9f-1c39-460e-8860-71af6af63bd6", this.product.getProductId());
+    void testSetProductNameValid() {
+        Product product = new Product();
+        product.setProductName("Smartphone");
+
+        assertEquals("Smartphone", product.getProductName());
     }
 
     @Test
-    void testGetProductName() {
-        assertEquals("Sampo Cap Bambang", this.product.getProductName());
+    void testSetProductNameInvalid() {
+        Product product = new Product();
+
+        Exception exception1 = assertThrows(IllegalArgumentException.class, () -> product.setProductName(null));
+        assertEquals("Product name cannot be empty!", exception1.getMessage());
+
+        Exception exception2 = assertThrows(IllegalArgumentException.class, () -> product.setProductName(""));
+        assertEquals("Product name cannot be empty!", exception2.getMessage());
     }
 
     @Test
-    void testGetProductQuantity() {
-        assertEquals(100, this.product.getProductQuantity());
+    void testSetDescriptionValid() {
+        Product product = new Product();
+        product.setDescription("A great product");
+
+        assertEquals("A great product", product.getDescription());
     }
 
-    // Positive scenario: Editing product successfully
     @Test
-    void testEditProduct_Success() {
-        // Edit product details
-        product.setProductName("Sampo Cap Aman");
-        product.setProductQuantity(50);
-
-        // Verify changes
-        assertEquals("Sampo Cap Aman", product.getProductName());
-        assertEquals(50, product.getProductQuantity());
+    void testSetDescriptionInvalid() {
+        Product product = new Product();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setDescription("   "));
+        assertEquals("Product description cannot be empty!", exception.getMessage());
     }
 
-    // Negative scenario: Editing product with invalid quantity (negative value)
     @Test
-    void testEditProduct_Fail_InvalidQuantity() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            product.setProductQuantity(-10);
-        });
+    void testSetProductQuantityValid() {
+        Product product = new Product();
+        product.setProductQuantity(10);
 
+        assertEquals(10, product.getProductQuantity());
+    }
+
+    @Test
+    void testSetProductQuantityInvalid() {
+        Product product = new Product();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setProductQuantity(-5));
         assertEquals("Product quantity cannot be negative!", exception.getMessage());
     }
 
-
-    // Negative scenario: Editing product with empty name
     @Test
-    void testEditProduct_Fail_EmptyName() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            product.setProductName("");
-        });
+    void testEqualsMethod() {
+        Product product1 = new Product("Tablet", "A lightweight tablet", 800.0, 2);
+        Product product2 = new Product("Tablet", "A lightweight tablet", 800.0, 2);
 
+        // Ensure the product IDs are the same for comparison
+        product2.setProductId(product1.getProductId());
+
+        assertEquals(product1, product2);
+    }
+
+    @Test
+    void testToStringMethod() {
+        Product product = new Product("Mouse", "Wireless mouse", 25.99, 3);
+        String expected = "Product{" +
+                "productId='" + product.getProductId() + '\'' +
+                ", productName='Mouse'" +
+                ", description='Wireless mouse'" +
+                ", price=25.99" +
+                ", productQuantity=3" +
+                '}';
+
+        assertEquals(expected, product.toString());
+    }
+
+    @Test
+    void testHashCodeMethod() {
+        Product product1 = new Product("Tablet", "A lightweight tablet", 800.0, 2);
+        Product product2 = new Product("Tablet", "A lightweight tablet", 800.0, 2);
+
+        // Ensure both products have the same ID for proper hashCode comparison
+        product2.setProductId(product1.getProductId());
+
+        assertEquals(product1.hashCode(), product2.hashCode());
+    }
+
+    @Test
+    void testSetEmptyProductNameThrowsException() {
+        Product product = new Product();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setProductName(""));
         assertEquals("Product name cannot be empty!", exception.getMessage());
     }
 
-    // Positive scenario: Deleting product successfully
     @Test
-    void testDeleteProduct_Success() {
-        product = null; // Simulating deletion
+    void testSetNullProductNameThrowsException() {
+        Product product = new Product();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setProductName(null));
+        assertEquals("Product name cannot be empty!", exception.getMessage());
 
-        assertNull(product, "Product should be deleted (nullified)");
     }
 
-    // Negative scenario: Deleting a product that is already null (double deletion)
     @Test
-    void testDeleteProduct_Fail_AlreadyDeleted() {
-        product = null; // First deletion
-
-        // Try deleting again
-        try {
-            product = null; // Second deletion attempt
-        } catch (Exception e) {
-            fail("Deleting a non-existent product should not throw an exception.");
-        }
-
-        assertNull(product, "Product should still be null after attempted re-deletion.");
+    void testValidDescription() {
+        Product product = new Product();
+        product.setDescription("A powerful gaming laptop");
+        assertEquals("A powerful gaming laptop", product.getDescription());
     }
+
+    @Test
+    void testInvalidDescriptionEmpty() {
+        Product product = new Product();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setDescription(""));
+        assertEquals("Product description cannot be empty!", exception.getMessage());
+    }
+
+    @Test
+    void testInvalidDescriptionNull() {
+        Product product = new Product();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setDescription(null));
+        assertEquals("Product description cannot be empty!", exception.getMessage());
+    }
+
+    @Test
+    void testEqualsSameObject() {
+        Product product = new Product("Phone", "A smartphone", 500.0, 10);
+        assertEquals(product, product); // Same reference should be equal
+    }
+
+    @Test
+    void testEqualsDifferentObjectsSameValues() {
+        Product product1 = new Product("Phone", "A smartphone", 500.0, 10);
+        Product product2 = new Product("Phone", "A smartphone", 500.0, 10);
+
+        // Set same ID to simulate real object comparison
+        product2.setProductId(product1.getProductId());
+
+        assertEquals(product1, product2);
+    }
+
+    @Test
+    void testNotEqualsDifferentProductId() {
+        Product product1 = new Product("Phone", "A smartphone", 500.0, 10);
+        Product product2 = new Product("Phone", "A smartphone", 500.0, 10);
+
+        // Different UUIDs mean they should not be equal
+        assertNotEquals(product1, product2);
+    }
+
+    @Test
+    void testNotEqualsDifferentName() {
+        Product product1 = new Product("Phone", "A smartphone", 500.0, 10);
+        Product product2 = new Product("Tablet", "A smartphone", 500.0, 10);
+
+        product2.setProductId(product1.getProductId()); // Ensure only the name differs
+        assertNotEquals(product1, product2);
+    }
+
+    @Test
+    void testNotEqualsDifferentDescription() {
+        Product product1 = new Product("Phone", "A smartphone", 500.0, 10);
+        Product product2 = new Product("Phone", "A different smartphone", 500.0, 10);
+
+        product2.setProductId(product1.getProductId()); // Ensure only the description differs
+        assertNotEquals(product1, product2);
+    }
+
+    @Test
+    void testNotEqualsDifferentPrice() {
+        Product product1 = new Product("Phone", "A smartphone", 500.0, 10);
+        Product product2 = new Product("Phone", "A smartphone", 600.0, 10);
+
+        product2.setProductId(product1.getProductId()); // Ensure only the price differs
+        assertNotEquals(product1, product2);
+    }
+
+    @Test
+    void testNotEqualsDifferentQuantity() {
+        Product product1 = new Product("Phone", "A smartphone", 500.0, 10);
+        Product product2 = new Product("Phone", "A smartphone", 500.0, 5);
+
+        product2.setProductId(product1.getProductId()); // Ensure only the quantity differs
+        assertNotEquals(product1, product2);
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        Product product = new Product("Phone", "A smartphone", 500.0, 10);
+        assertNotEquals(product, null); // Should return false
+    }
+
+    @Test
+    void testEqualsWithDifferentClass() {
+        Product product = new Product("Phone", "A smartphone", 500.0, 10);
+        String notAProduct = "I am not a product";
+        assertNotEquals(product, notAProduct); // Should return false
+    }
+
+    @Test
+    void testSetPriceValid() {
+        Product product = new Product();
+        product.setPrice(999.99);
+
+        assertEquals(999.99, product.getPrice());
+    }
+
+    @Test
+    void testSetPriceInvalid() {
+        Product product = new Product();
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> product.setPrice(-50.0));
+        assertEquals("Product price cannot be negative!", exception.getMessage());
+    }
+
 }
