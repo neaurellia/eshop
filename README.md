@@ -1,3 +1,4 @@
+Module 1
 Reflection 1
 
 Here, my code follows the clean code principals taught in class to improve readability, maintainability and efficiency.
@@ -32,3 +33,16 @@ Reflection 2
 2. - The chances of both test suites having similar setup methods are high, hence the code might be redundant. To avoid this, we can gather the common setup logic into a base test class and both test suites can inherit from it.
 - However if each test suite has its own implementation, code reusability would be reduced. To avoid this we can use helper methods.
 - If a different validation rule is introduced, multiple test suites must be updated separately. We can use parameterized tests/reusable test utilites to keep the test logic modular.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Module 2
+1. I noticed the following issues:
+- SonarCloud Authentication Failure (401 Unauthorized)
+Issue: CI/CD pipeline failed due to invalid/missing SonarCloud token.
+Solution: Regenerated SonarCloud Token, updated it in GitHub Secrets, fix build.gradle.kts and sonarcloud.yml.
+- Lack of Proper Dependency Caching
+Issue: CI/CD runs were slow due to redundant dependency downloads.
+Solution: Implemented Gradle caching in GitHub Actions using the actions/cache@v3 step.
+
+2. Every push and pull request triggers automated builds and SonarCloud analysis, ensuring that code is always tested and analyzed before merging. However, additional unit tests, integration tests, and linting could further improve quality checks.
+   The workflow does not yet automatically deploy successful builds. Adding a step to notify developers (e.g., via Slack or email) on failed builds can enhance team collaboration.
