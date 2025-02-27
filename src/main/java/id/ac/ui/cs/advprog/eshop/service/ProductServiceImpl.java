@@ -31,21 +31,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void update(Product product) {
         if (product == null || product.getProductId() == null) {
-            throw new IllegalArgumentException("Product or product ID cannot be null");
+            throw new IllegalArgumentException("Product and product ID must not be null.");
         }
 
         Product existingProduct = productRepository.findById(product.getProductId());
         if (existingProduct == null) {
-            throw new IllegalArgumentException("Cannot update: Product not found!");
+            throw new IllegalArgumentException("Update failed: Product not found.");
         }
 
+        // Update fields
         existingProduct.setProductName(product.getProductName());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
         existingProduct.setProductQuantity(product.getProductQuantity());
 
-        productRepository.update(existingProduct); // Ensure repository updates it
+        // Persist changes
+        productRepository.update(existingProduct);
     }
+
 
     @Override
     public void delete(String productId) {
