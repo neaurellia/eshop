@@ -14,7 +14,7 @@ public class CarRepository {
     private List<Car> carData = new ArrayList<>();
 
     public Car create(Car car) {
-        if (car.getCarID() == null) {
+        if (car.getCarId() == null) {
             UUID uuid = UUID.randomUUID();
             car.setCarId(uuid.toString());
         }
@@ -26,7 +26,7 @@ public class CarRepository {
         return carData.iterator();
     }
 
-    public Car findByID(String id) {
+    public Car findById(String id) {
         for (Car car : carData) {
             if (car.getCarId().equals(id)) {
                 return car;
@@ -53,5 +53,4 @@ public class CarRepository {
     public void delete(String id) {
         carData.removeIf(car -> car.getCarId().equals(id));
     }
-
 }

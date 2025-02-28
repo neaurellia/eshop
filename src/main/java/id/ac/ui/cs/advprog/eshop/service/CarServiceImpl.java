@@ -1,5 +1,4 @@
 package id.ac.ui.cs.advprog.eshop.service;
-
 import id.ac.ui.cs.advprog.eshop.model.Car;
 import id.ac.ui.cs.advprog.eshop.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,16 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car create(Car car) {
-        return carRepository.create(car); // Persist and return created car
+        carRepository.create(car); // Persist car in repository
+        return car;
     }
 
     @Override
     public List<Car> findAll() {
-        Iterator<Car> carIterator = carRepository.findAll(); // FIX: `Car`, not `car`
-        List<Car> allCars = new ArrayList<>();
-        carIterator.forEachRemaining(allCars::add);
-        return allCars;
+        Iterator<Car> carIterator = carRepository.findAll();
+        List<Car> allCar = new ArrayList<>();
+        carIterator.forEachRemaining(allCar::add);
+        return allCar;
     }
 
     @Override
@@ -44,16 +44,23 @@ public class CarServiceImpl implements CarService {
 
         // Update fields
         existingCar.setCarName(car.getCarName());
-        existingCar.setDescription(car.getDescription());
-        existingCar.setPrice(car.getPrice());
+        existingCar.setCarColor(car.getCarColor());
         existingCar.setCarQuantity(car.getCarQuantity());
 
-        // Persist changes
-        carRepository.update(carId, existingCar);
+        carRepository.update(carId, existingCar); // Persist changes
     }
 
     @Override
     public void deleteCarById(String carId) {
-        carRepository.delete(carId);
+        if (carId == null) {
+            throw new IllegalArgumentException("Car ID must not be null.");
+        }
+
+        Car car = carRepository.findById(carId);
+        if (car == null) {
+            throw new IllegalArgumentException("Delete failed: Car not found.");
+        }
+
+        carRepository.delete(carId); // Delete car from repository
     }
 }
