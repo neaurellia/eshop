@@ -8,12 +8,14 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class Product {
+public abstract class Product {
     private String productId;
     private String productName;
     private String description;
     private double price;
     private int productQuantity;
+
+    public abstract String getProductType();
 
     // Default constructor (auto-generates productId)
     public Product() {

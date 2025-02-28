@@ -46,3 +46,21 @@ Solution: Implemented Gradle caching in GitHub Actions using the actions/cache@v
 
 2. Every push and pull request triggers automated builds and SonarCloud analysis, ensuring that code is always tested and analyzed before merging. However, additional unit tests, integration tests, and linting could further improve quality checks.
    The workflow does not yet automatically deploy successful builds. Adding a step to notify developers (e.g., via Slack or email) on failed builds can enhance team collaboration.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Module 3
+1. I applied the entire SOLID principles.
+- Single Responsibility Principle:  Instead of a single ProductServiceImpl handling product creation, updating, and deletion, we separated them into CreateProduct, UpdateProduct, and DeleteProduct interfaces.
+- Open-Closed Principle: ProductServiceImpl supports different product types (like Car) without modifying the original class by using polymorphism.
+- Liskov Substitution Principle: Car extends Product, and we can treat Car as a Product in our ProductService without breaking functionality.
+- Interface Segregation Principle: We split ProductService into separate interfaces (CreateProduct, UpdateProduct, and DeleteProduct) to ensure that classes only implement the methods they need.
+- Dependency Inversion Principle: ProductController depends on ProductService (interface), not on ProductServiceImpl. This allows for easier dependency injection and testing.
+
+2. - Better Code Maintainability. Ex: If we want to change how products are updated, we only modify UpdateProduct without affecting other operations.
+- New features can be added without modifying existing code: Ex: If we introduce a new product type (e.g., Electronics), we simply create a new class extending Product without modifying ProductService.
+- Improved Testability: ProductController can be tested independently by mocking ProductService.
+- Easier Collaboration: One developer can work on CreateProduct while another works on DeleteProduct without conflicts.
+
+3. - Difficult to Maintain and Modify: If ProductService handled all operations in a single class, modifying product deletion could break product creation.
+- Harder to Extend: Without OCP, adding a new product type (e.g., Electronics) would require modifying multiple files, increasing the risk of errors.
+- Code Becomes Coupled and Rigid: Without DIP, ProductController would depend directly on ProductServiceImpl, making it harder to replace implementations.
+- More Bugs and Testing Issues: A ReadOnlyProductService would still have to implement update() and delete(), even if they are not needed.
