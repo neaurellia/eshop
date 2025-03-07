@@ -64,3 +64,30 @@ Module 3
 - Harder to Extend: Without OCP, adding a new product type (e.g., Electronics) would require modifying multiple files, increasing the risk of errors.
 - Code Becomes Coupled and Rigid: Without DIP, ProductController would depend directly on ProductServiceImpl, making it harder to replace implementations.
 - More Bugs and Testing Issues: A ReadOnlyProductService would still have to implement update() and delete(), even if they are not needed.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Module 4
+Tutorial Reflection
+1. The TDD flow was helpful because:
+- It made me think about how OrderService should work before writing the actual code.
+- Writing tests first helped me catch edge cases (like invalid order IDs or updating with a wrong status).
+- When tests failed, it was easier to figure out what was wrong and fix it.
+
+But there were some issues:
+- In testCreateOrderIfAlreadyExists(), I used assertNull(), which doesn’t explain why the order already exists. Maybe throwing an exception would be better.
+- Mocking findById() with null might not be the best way, since in a real database it would probably return Optional.empty().
+
+What I Should Do Next Time:
+- Make sure tests check both the result and side effects (like whether the database actually changes).
+- Use better assertions instead of just assertNull().
+- Write smaller, more focused tests to make debugging easier.
+
+2. - Fast: The tests run quickly because I used mocks instead of a real database.
+- Independent: I kind of implemented it well, Some tests use shared data, so I should make sure each test gets fresh data using @BeforeEach.
+- Repeatable: The tests give the same results every time since I mocked dependencies.
+- Self-validating: Each test has clear pass/fail results using assertions.
+Timely: I didn't always implement it. Some tests were written after the code. Next time, I should follow TDD strictly (write tests first, then code).
+
+3. What I’ll Do Better Next Time:
+   Make tests fully independent by resetting data before each test.
+   Instead of returning null, I should throw proper exceptions to make issues clearer.
+   Follow TDD properly by writing tests before coding
