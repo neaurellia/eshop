@@ -1,5 +1,4 @@
-// [RED] Add PaymentServiceTest with test structure
-package id.ac.ui.cs.advprog.eshop.service;
+package id.ac.ui.cs.advprog.eshop.model;
 
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
