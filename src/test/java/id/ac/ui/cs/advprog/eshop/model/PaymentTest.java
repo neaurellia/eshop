@@ -1,7 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
-import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
+import id.ac.ui.cs.advprog.eshop.service.PaymentServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,16 +45,16 @@ class PaymentServiceTest {
         paymentData.put("voucherCode", "ESHOP123456789012");
         Payment payment = paymentService.addPayment("order123", "VOUCHER", paymentData);
         assertNotNull(payment);
-        assertEquals("PENDING", payment.getStatus());
+        assertEquals(PaymentStatus.PENDING, payment.getStatus());
     }
 
     @Test
     void testCreatePaymentSuccessfully() {
         paymentData.put("voucherCode", "ESHOP123456789012");
-        Payment payment = new Payment("pay123", "VOUCHER", "SUCCESS", paymentData);
+        Payment payment = new Payment("pay123", "VOUCHER", PaymentStatus.SUCCESS, paymentData);
         when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
         Payment result = paymentService.addPayment("order123", "VOUCHER", paymentData);
-        assertEquals("SUCCESS", result.getStatus());
+        assertEquals(PaymentStatus.SUCCESS, result.getStatus());
     }
 
     @Test
@@ -67,17 +67,17 @@ class PaymentServiceTest {
 
     @Test
     void testUpdatePaymentWithValidStatus() {
-        Payment payment = new Payment("pay123", "VOUCHER", "PENDING", paymentData);
+        Payment payment = new Payment("pay123", "VOUCHER", PaymentStatus.PENDING, paymentData);
         when(paymentRepository.findById("pay123")).thenReturn(Optional.of(payment));
         when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
 
-        Payment updated = paymentService.setStatus(payment, "SUCCESS");
-        assertEquals("SUCCESS", updated.getStatus());
+        Payment updated = paymentService.setStatus(payment, PaymentStatus.SUCCESS.name());
+        assertEquals(PaymentStatus.SUCCESS, updated.getStatus());
     }
 
     @Test
     void testUpdatePaymentWithInvalidStatus() {
-        Payment payment = new Payment("pay123", "VOUCHER", "PENDING", paymentData);
+        Payment payment = new Payment("pay123", "VOUCHER", PaymentStatus.PENDING, paymentData);
         when(paymentRepository.findById("pay123")).thenReturn(Optional.of(payment));
 
         assertThrows(IllegalArgumentException.class, () ->
@@ -87,7 +87,7 @@ class PaymentServiceTest {
 
     @Test
     void testGetPaymentById() {
-        Payment payment = new Payment("pay123", "VOUCHER", "SUCCESS", paymentData);
+        Payment payment = new Payment("pay123", "VOUCHER", PaymentStatus.SUCCESS, paymentData);
         when(paymentRepository.findById("pay123")).thenReturn(Optional.of(payment));
         Payment result = paymentService.getPayment("pay123");
         assertEquals("pay123", result.getId());
