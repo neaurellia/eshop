@@ -5,7 +5,6 @@ import java.util.List;
 import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Builder
 @Getter
