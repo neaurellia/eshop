@@ -13,4 +13,18 @@ public class Payment {
     @Setter
     private String status;
     private Map<String, String> paymentData;
+
+    public Payment(String id, String method, String status, Map<String, String> paymentData) {
+        this.id = id;
+        this.method = method;
+        this.status = status;
+        this.paymentData = paymentData;
+    }
+
+    public Payment(String id, String method, Map<String, String> paymentData) {
+        this.id = id;
+        this.method = method;
+        this.status = "PENDING"; // Default status
+        this.paymentData = paymentData;
+    }
 }
